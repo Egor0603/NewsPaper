@@ -1,0 +1,39 @@
+{% extends 'flatpages/default.html' %}
+
+{% block title %} Post {% endblock title %}
+ 
+{% block content %}
+<table>
+  <thead>
+         <th>
+            Author
+        </th>
+        <th>
+            Category
+        </th>
+        <th>
+            Date
+        </th>
+        <th>
+            Text
+        </th>
+    </thead>
+    <tr>
+     <td>
+            {{ post.author.user |title }}
+        </td>
+        <td>
+            {% for p in post.cats.all %}
+            {{ p }}
+            {% endfor %}
+        </td>
+        <td>
+            {{ post.created|date:"d.m.Y h:i:s" }}
+        </td>
+        <td>
+            {{ post.text }}
+        </td>
+    </tr>
+</table>
+
+{% endblock content %}

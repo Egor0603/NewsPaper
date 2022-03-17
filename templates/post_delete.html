@@ -1,0 +1,47 @@
+{% extends 'flatpages/default.html' %}
+
+{% block title %} Product list {% endblock title %}
+ 
+{% block content %}
+<h2>Are you sure you want to delete this post?</h2>
+<table>
+    <thead>
+        <th>
+            Author
+        </th>
+        <th>
+            Category
+        </th>
+        <th>
+            Title
+        </th>
+        <th>
+            Date
+        </th>
+        <th>
+            Text
+        </th>
+    </thead>
+    <tr>
+        <td>
+            {{ post.author.user |title }}
+        </td>
+        <td>
+            {{ post.cats.name|title }}
+        </td>
+        <td>
+            {{ post.title }}
+        </td>
+        <td>
+            {{ post.created|date:"d.m.Y h:i:s" }}
+        </td>
+        <td>
+            {{ post.text }}
+        </td>
+    </tr>
+</table>
+ 
+<form method="POST">
+    {% csrf_token %}
+    <input type="submit" value="I'm sure"></form>
+{% endblock content %} 

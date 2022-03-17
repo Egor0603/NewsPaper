@@ -1,6 +1,8 @@
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView, UpdateView, CreateView, DetailView, DeleteView
 from .models import Post
 from .filters import PostFilter
+from .forms import PostForm
+
 from django.core.paginator import Paginator
 
 
@@ -9,11 +11,7 @@ class PostsList(ListView):
     template_name = 'search.html'
     context_object_name = 'posts'
     queryset = Post.objects.order_by('-created')
-    paginate_by = 10
-
-    def get_queryset(self):
-        queryset = super().get_queryset()
-        return PostFilter(self.request.GET, queryset=queryset).qs
+    paginate_by = 1
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -21,9 +19,35 @@ class PostsList(ListView):
         return context
 
 
+class PostDetailView(DetailView):
+    template_name = 'post_detail.html'
+    queryset = Post.objects.all()
+
+
+class PostCreateView(CreateView):
+    template_name = 'post_create.html'
+    form_class = PostForm
+
+
+class PostUpdateView(UpdateView):
+    template_name = 'post_create.html'
+    form_class = PostForm
+
+
+    def get_object(self, **kwargs):
+        id = self.kwargs.get('pk')
+        return Post.objects.get(pk=id)
+
+
+class PostDeleteView(DeleteView):
+    template_name = 'post_delete.html'
+    queryset = Post.objects.all()
+    success_url = '/search/'
+
+
 class PostDetail(DetailView):
     model = Post
-    template_name = 'post.html'
+    template_name = 'post_detail.html'
     context_object_name = 'post'
 
 

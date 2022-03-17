@@ -1,30 +1,82 @@
 {% extends 'flatpages/default.html' %}
-{% load custom_filters %}
 
-
-{% block title %}
-Products
-{% endblock title %}
+{% block title %} Post list {% endblock title %}
 
 {% block content %}
-    <h1>All posts</h1>
-    <hr>
-    {% if posts %}
-        <h3>{{ posts|length }}</h3>>
-        {% for post in posts %}
-            <tr>
-                <td>
-                    {{ post.title }}
-                </td>
-                <td>
-                    {{ post.created|date:'M d Y' }}
-                </td>
-                <td>
-                    {{ post.text|truncatewords:20 }}
-                </td>
-            </tr>
-        {% endfor %}
-    {% else %}
-        <h2>There are no posts here</h2>
+
+<form method="GET">
+    {{ filter.form }}
+    <input type="submit" value="Найти">
+</form>
+
+<table>
+    <thead>
+         <th>
+            Author
+        </th>
+        <th>
+            Category
+        </th>
+        <th>
+            Title
+        </th>
+        <th>
+            Text
+        </th>
+        <th>
+            Date
+        </th>
+    </thead>
+    {% for post in object_list %} <!-- поменяем products на filter.qs, т.к. теперь мы забираем уже отобранную по каким-то параметрам информацию -->
+    <tr>
+        <td>
+            <a href="{% url 'post_detail' post.id %}">{{ post.title|title }}</a> <!-- При нажатии на имя товара в таблице нас теперь будет перекидывать на страницу с самого товара -->
+            <a href="{% url 'post_update' post.id %}"><u>Edit</u></a> <!-- добавим ссылку на редактирование товара-->
+
+            <a href="{% url 'post_delete' post.id %}"><u> Delete </u></a> <!-- добавим ссылку на удаление товара-->
+        </td>
+        <td>
+            {{ post.author.user |title }}
+        </td>
+        <td>
+            {{ post.cats.name|title }}
+        </td>
+        <td>
+            {{ post.title }}
+        </td>
+        <td>
+            {{ post.created|date:"d.m.Y h:i:s" }}
+        </td>
+        <td>
+            {{ post.text }}
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+<a href="{% url 'post_create' %}">Create a new post</a> <br>
+
+
+{% if is_paginated %}
+
+    {% if page_obj.has_previous %}
+        <a href="?page=1">First</a>
+        <a href="?page={{ page_obj.previous_page_number }}"><<<</a>
     {% endif %}
+
+    {% for num in page_obj.paginator.page_range %}
+        {% if page_obj.number == num %}
+            <a>{{ num }}</a>
+        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+            <a href="?page={{ num }}">{{ num }}</a>
+        {% endif %}
+    {% endfor %}
+
+    {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}">>>></a>
+        <a href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+    {% endif %}
+{% endif %}
+<br>
+
 {% endblock content %}
