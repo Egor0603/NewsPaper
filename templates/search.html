@@ -27,13 +27,13 @@
             Text
         </th>
     </thead>
-    {% for post in object_list %} <!-- поменяем products на filter.qs, т.к. теперь мы забираем уже отобранную по каким-то параметрам информацию -->
+    {% for post in posts %}
     <tr>
         <td>
-            <a href="{% url 'post_detail' post.id %}">{{ post.title|title }}</a> <!-- При нажатии на имя товара в таблице нас теперь будет перекидывать на страницу с самого товара -->
-            <a href="{% url 'post_update' post.id %}"><u>Edit</u></a> <!-- добавим ссылку на редактирование товара-->
+            <a href="{% url 'post_detail' post.id %}">{{ post.title|title }}</a>
+            <a href="{% url 'post_update' post.id %}"><u>Edit</u></a>
 
-            <a href="{% url 'post_delete' post.id %}"><u> Delete </u></a> <!-- добавим ссылку на удаление товара-->
+            <a href="{% url 'post_delete' post.id %}"><u> Delete </u></a>
         </td>
         <td>
             {{ post.author.user |title }}

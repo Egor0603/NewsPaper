@@ -38,9 +38,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'news',
-    'accounts',
+    'accounts', #???
     'django.contrib.sites',
     'django.contrib.flatpages',
+    'sign'
 ]
 
 SITE_ID = 1
@@ -61,7 +62,7 @@ ROOT_URLCONF = 'NewsPaper.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        'DIRS': [BASE_DIR, 'templates'], #[os.path.join(BASE_DIR, 'templates')]
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -129,3 +130,7 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
 
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
+
+LOGIN_URL = 'sign/login/'
+
+LOGIN_REDIRECT_URL = '/'

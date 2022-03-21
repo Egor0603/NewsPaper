@@ -1,4 +1,5 @@
-from django.views.generic import ListView, UpdateView, CreateView, DetailView, DeleteView
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic import ListView, UpdateView, CreateView, DetailView, DeleteView, TemplateView
 from .models import Post
 from .filters import PostFilter
 from .forms import PostForm
@@ -13,10 +14,17 @@ class PostsList(ListView):
     queryset = Post.objects.order_by('-created')
     paginate_by = 1
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['filter'] = PostFilter(self.request.GET, queryset=self.get_queryset())
-        return context
+    def get_filter(self):
+        return PostFilter(self.request.GET, queryset=super().get_queryset())
+
+    def get_queryset(self):
+        return self.get_filter().qs
+
+    def get_context_data(self, *args, **kwargs):
+        return {
+            **super().get_context_data(*args, **kwargs),
+            'filter': self.get_filter()
+        }
 
 
 class PostDetailView(DetailView):
@@ -42,7 +50,7 @@ class PostUpdateView(UpdateView):
 class PostDeleteView(DeleteView):
     template_name = 'post_delete.html'
     queryset = Post.objects.all()
-    success_url = '/search/'
+    success_url = '/news/search/'
 
 
 class PostDetail(DetailView):
@@ -58,10 +66,7 @@ class NewsList(ListView):
     queryset = Post.objects.order_by('-id')
 
 
-class NewsDetail(DetailView):
-    model = Post
-    template_name = 'article.html'
-    context_object_name = 'article'
-
+class IndexView(LoginRequiredMixin, TemplateView):
+    template_name = 'index.html'
 
 

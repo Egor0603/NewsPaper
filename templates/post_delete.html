@@ -27,7 +27,9 @@
             {{ post.author.user |title }}
         </td>
         <td>
-            {{ post.cats.name|title }}
+            {% for p in post.cats.all %}
+            {{ p }}
+            {% endfor %}
         </td>
         <td>
             {{ post.title }}
