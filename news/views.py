@@ -32,7 +32,7 @@ class PostDetailView(DetailView):
     queryset = Post.objects.all()
 
 
-class PostCreateView(CreateView):
+class PostCreateView(LoginRequiredMixin, CreateView):
     template_name = 'post_create.html'
     form_class = PostForm
 
@@ -40,7 +40,6 @@ class PostCreateView(CreateView):
 class PostUpdateView(UpdateView):
     template_name = 'post_create.html'
     form_class = PostForm
-
 
     def get_object(self, **kwargs):
         id = self.kwargs.get('pk')
