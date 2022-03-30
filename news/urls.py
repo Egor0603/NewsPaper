@@ -12,5 +12,5 @@ urlpatterns = [
     path('<int:pk>/', PostDetailView.as_view(), name='post_detail'),
     path('add/', PostCreateView.as_view(), name='post_create'),
 
-    path('', IndexView.as_view())
+    path('index/', IndexView.as_view(), name='index')
 ]
