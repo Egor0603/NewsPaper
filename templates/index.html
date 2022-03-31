@@ -2,10 +2,10 @@
 
 {% block content %}
 {% if is_not_author %}
-<button> <a href="/sign/upgrade/"> Стать автором!</a> </button>
+<button> <a href="{% url 'upgrade1' %}"> Стать автором!</a> </button>
 {% endif %}
 <h2>Страница авторизованного пользователя {{request.user.username}}</h2>
 <div> Здесь может содержаться персональная информация для каждого пользователя </div>
 
-<button> <a href="/sign/logout/">Выйти</a> </button>
+<button> <a href="{% url 'logout' %}">Выйти</a> </button>
 {% endblock %}

@@ -11,8 +11,7 @@ from django.contrib.auth.decorators import login_required
 class BaseRegisterView(CreateView):
     model = User
     form_class = BaseRegisterForm
-    success_url = '/news/search'
-
+    success_url = '/news/search/'
 
 
 @login_required
