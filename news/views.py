@@ -77,3 +77,6 @@ class IndexView(LoginRequiredMixin, TemplateView):
         return context
 
 
+
+
+

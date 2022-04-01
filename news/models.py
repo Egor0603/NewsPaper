@@ -57,7 +57,6 @@ class Post(models.Model):
         return f'/news/{self.id}'
 
 
-
 class PostCategory(models.Model):
     post = models.ForeignKey(Post, on_delete = models.CASCADE)
     category = models.ForeignKey(Category, on_delete = models.CASCADE)
@@ -77,4 +76,6 @@ class Comment(models.Model):
     def dislike(self):
         self.rating -= 1
         self.save()
+
+
 
