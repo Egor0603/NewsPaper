@@ -3,6 +3,7 @@ from datetime import datetime
 
 
 class Appointment(models.Model):
+
     date = models.DateField(
         default=datetime.utcnow,
     )
@@ -13,3 +14,8 @@ class Appointment(models.Model):
 
     def __str__(self):
         return f'{self.client_name}: {self.message}'
+
+    def get_absolute_url(self):
+        return f'/appointments/success/{self.pk}'
+
+

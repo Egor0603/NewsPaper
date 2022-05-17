@@ -15,10 +15,17 @@ class Author(models.Model):
 
 
 class Category(models.Model):
-    name = models.CharField(max_length = 64, unique = True)
+    name = models.CharField(max_length=64, unique=True)
+    subscribers = models.ManyToManyField(User, through='UsersCategory', verbose_name='subscribers')
 
     def __str__(self):
         return str(self.name)
+
+    def get_emails(self):
+        result = set()
+        for user in self.subscribers.all():
+            result.add(user.email)
+        return result
     
     
 class Post(models.Model):
@@ -31,7 +38,7 @@ class Post(models.Model):
     ]
     
     author = models.ForeignKey(Author, on_delete = models.CASCADE)
-    post_type = models.CharField(max_length = 1, choices = POST_TYPE, default = article)
+    post_type = models.CharField(max_length = 2, choices = POST_TYPE, default = article)
     created = models.DateTimeField(auto_now_add = True)
     cats = models.ManyToManyField(Category, through = 'PostCategory', verbose_name='Category')
     title = models.CharField(max_length = 256)
@@ -76,6 +83,11 @@ class Comment(models.Model):
     def dislike(self):
         self.rating -= 1
         self.save()
+
+
+class UsersCategory(models.Model):
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    users = models.ForeignKey(User, on_delete=models.CASCADE)
 
 
 

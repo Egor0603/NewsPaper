@@ -1,8 +1,11 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.contrib.auth.models import User
+from django.shortcuts import redirect
 from django.views.generic import ListView, UpdateView, CreateView, DetailView, DeleteView, TemplateView
-from .models import Post
+from .models import Post, Category, Author
 from .filters import PostFilter
 from .forms import PostForm
+from .signals import check_post_today
 
 from django.core.paginator import Paginator
 
@@ -36,6 +39,21 @@ class PostCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     permission_required = ('news.add_post',)
     template_name = 'post_create.html'
     form_class = PostForm
+
+    def post(self, request, *args, **kwargs):
+        cats_id_list = list(map(int, request.POST.getlist('category')))
+        category = Category.objects.filter(pk__in=cats_id_list)
+        new_post = Post(title=request.POST['title'],
+                        text=request.POST['text'],
+                        author=Author.objects.get(pk=request.POST['author']),
+                        # type=request.POST['post_type']
+                        )
+        if check_post_today(sender=Post, instance=new_post, **kwargs) < 3:
+            new_post.save()
+            for cat in category:
+                new_post.category.add(cat)
+
+        return redirect('/news/search/')
 
 
 class PostUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
@@ -77,6 +95,9 @@ class IndexView(LoginRequiredMixin, TemplateView):
         return context
 
 
-
-
-
+def subscribe(request, *args, **kwargs):
+    post = Post.objects.get(pk=kwargs['pk'])
+    for category in post.cats.all():
+        user = User.objects.get(pk=request.user.id)
+        category.subscribers.add(user)
+    return redirect('/news/search')

@@ -1,0 +1,8 @@
+{% extends "flatpages/base.html" %}
+
+{% block content %}
+<body>
+    <h2>{{ appointment.client_name }} Спасибо за запись!</h2>
+    <p> Вы записаны на {{ appointment.date|date:"d-M-Y" }} по вопросу: {{ appointment.message|truncatechars:50 }} </p>
+</body>
+{% endblock content %}
