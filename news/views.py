@@ -7,7 +7,9 @@ from .filters import PostFilter
 from .forms import PostForm
 from .signals import check_post_today
 
-from django.core.paginator import Paginator
+from django.http import HttpResponse
+from django.views import View
+from .tasks import hello
 
 
 class PostsList(ListView):
@@ -101,3 +103,10 @@ def subscribe(request, *args, **kwargs):
         user = User.objects.get(pk=request.user.id)
         category.subscribers.add(user)
     return redirect('/news/search')
+
+
+# class IndexV(View):
+#
+#     def get(self, request):
+#         hello.delay()
+#         return HttpResponse('Hello!')

@@ -1,2 +1,2 @@
 
-HOST_PASSWORD = 'email password'
+HOST_PASSWORD = 'password here'

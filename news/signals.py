@@ -2,7 +2,7 @@ from datetime import datetime
 
 from django.db.models.signals import m2m_changed, pre_save
 from django.dispatch import receiver
-from django.core.mail import mail_admins, EmailMultiAlternatives
+from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 
 from NewsPaper import settings

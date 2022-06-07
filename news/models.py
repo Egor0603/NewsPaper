@@ -26,7 +26,7 @@ class Category(models.Model):
         for user in self.subscribers.all():
             result.add(user.email)
         return result
-    
+
     
 class Post(models.Model):
     article = 'a'
