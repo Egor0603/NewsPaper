@@ -27,7 +27,7 @@ def notif_users():
         subject=f'Weekly articles!',
         body=Post.text,
         from_email=settings.DEFAULT_FROM_EMAIL,
-        to=['hghgegor@mail.ru']#category.get_emails()
+        to=category.get_emails()
         )
         print('YES!')
 
